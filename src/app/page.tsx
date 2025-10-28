@@ -158,7 +158,7 @@ export default function Home() {
 
             resolve(data);
           },
-          error: (error) => {
+          error: (error: any) => {
             reject(error);
           },
         });
