@@ -1,0 +1,34 @@
+/*
+header{
+left
+-----
+heading: Leetcode questions company wise
+subheading: List of questions previously asked in different company oa and interviews, credit: liquidslr(href:https://github.com/liquidslr)
+
+right
+-----
+darkmode btn + log in
+}
+
+main{
+company search bar, difficulty filters [flexed row in desktop, col in mobile], add the filters beautifully
+
+then table.
+col: 5
+1. difficulty
+2. title
+3. frequency
+4. Link/visit[new tab]
+5. topics [add 3 topics, then click to expand the col in y direction]
+
+on row hover appear a small checkbox [for done marking]. strike through the qn title if done, toggle
+
+paginate 25 per page
+}
+
+
+footer{
+full data storing credit to liquidslr, his repo link: https://github.com/liquidslr/leetcode-company-wise-problems
+& a line of my contact (a link)
+}
+*/
