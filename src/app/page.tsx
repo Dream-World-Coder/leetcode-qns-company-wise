@@ -9,6 +9,7 @@ import {
   ChevronUp,
   X,
   Search,
+  Regex,
 } from "lucide-react";
 import Papa from "papaparse";
 
@@ -21,43 +22,62 @@ interface LeetCodeProblem {
   id?: string;
 }
 
-const mockData: LeetCodeProblem[] = [
-  {
-    difficulty: "Easy",
-    title: "Two Sum",
-    frequency: 95.0,
-    link: "https://leetcode.com/problems/two-sum/",
-    topics: ["Array", "Hash Table", "Sorting", "Two Pointers", "Binary Search"],
-  },
-  {
-    difficulty: "Medium",
-    title: "Add Two Numbers",
-    frequency: 87.6,
-    link: "https://leetcode.com/problems/add-two-numbers/",
-    topics: ["Linked List", "Math", "Recursion"],
-  },
-  {
-    difficulty: "Hard",
-    title: "Median of Two Sorted Arrays",
-    frequency: 78.4,
-    link: "https://leetcode.com/problems/median-of-two-sorted-arrays/",
-    topics: ["Array", "Binary Search", "Divide and Conquer"],
-  },
-  {
-    difficulty: "Medium",
-    title: "Longest Substring Without Repeating Characters",
-    frequency: 92.0,
-    link: "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
-    topics: ["Hash Table", "String", "Sliding Window"],
-  },
-  {
-    difficulty: "Easy",
-    title: "Palindrome Number",
-    frequency: 65.0,
-    link: "https://leetcode.com/problems/palindrome-number/",
-    topics: ["Math"],
-  },
-];
+interface ResponseData {
+  Difficulty?: "EASY" | "MEDIUM" | "HARD";
+  Title?: string;
+  Frequency?: string | number;
+  Link?: string;
+  Topics?: string;
+}
+
+const CustomSVG: React.FC = () => {
+  return (
+    <svg
+      width="200"
+      height="240"
+      viewBox="0 0 400 400"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="rounded-sm invert-100 dark:invert-0"
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth="0">
+        <rect
+          x="-40"
+          y="-40"
+          width="480"
+          height="480"
+          rx="0"
+          fill="transparent"
+          strokeWidth="0"
+        />
+      </g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      ></g>
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M87 354.009C95.9827 332.493 116.732 298.757 154.015 283.273C166.397 278.131 180.602 275.002 196.805 275.002C212.206 275.002 226.185 277.972 238.683 282.846C283.164 300.193 308.896 341.657 313.275 359.171"
+          stroke="#ffffff"
+          strokeOpacity="0.9"
+          strokeWidth="20"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          opacity="0.503384"
+          d="M205.288 62.9543C212.202 59.9093 208.776 61.4746 220.29 55.7274C226.629 52.563 234.549 48.8226 241.858 50.9087C251.804 53.7482 266.926 72.7469 254.986 81.7461C228.359 101.813 185.068 91.3966 166.842 125.111C163.694 130.934 162.288 138.388 164.967 144.866C172.583 163.283 217.291 160.4 232.481 158.839C234.94 158.587 247.739 158.611 247.483 152.575C246.45 128.127 194.535 94.5506 178.095 78.3734C176.761 77.0613 159.497 60.9096 165.904 54.7636C168.747 52.0366 182.173 56.9112 182.783 57.1726C203.846 66.1919 260.489 99.5431 246.546 129.448C230.982 162.828 150.424 148.643 155.121 194.977C157.125 214.746 188.514 220.988 202.474 224.851C227.763 231.848 279.673 249.057 287.336 208.469C292.635 180.4 279.69 128.835 245.139 127.52C211.51 126.24 181.84 165.962 139.649 154.984C99.8754 144.636 95.9881 83.8881 116.207 57.1726C140.198 25.4722 173.505 47.8995 201.537 61.0276C220.933 70.111 245.902 80.7106 244.671 107.283C243.257 137.793 227.583 163.029 210.445 186.786C201.427 199.286 184.53 215.921 183.252 232.56C181.706 252.681 210.71 251.665 222.635 248.942C236.145 245.857 251.104 236.693 261.08 227.26C281.515 207.939 300.416 174.584 295.775 144.866C290.129 108.713 235.577 74.4102 203.881 76.4459C191.807 77.2213 186.878 83.1631 181.376 93.3102C168.488 117.084 163.858 144.429 163.56 171.367C163.395 186.262 169.519 202.137 168.249 216.178C167.232 227.403 159.286 230.252 149.964 225.332C114.863 206.809 130.326 131.813 136.367 101.501C137.876 93.9325 137.169 82.1456 144.337 79.8187C152.011 77.3283 165.805 103.215 165.904 103.428C179.128 131.773 176.716 212.773 128.865 202.686C91.937 194.901 123.901 76.3487 167.311 83.6736C206.507 90.2866 233.069 130.476 235.294 168.958C235.779 177.342 234.284 197.049 227.792 205.095C219.216 215.724 186.66 217.283 178.095 206.059C173.823 200.463 170.385 193.79 169.186 186.786C164.308 158.273 190.612 79.293 217.946 66.3271C254.676 48.906 276.061 100.143 273.739 128.484C268.668 190.369 182.871 210.355 142.931 169.921C125.004 151.773 122.711 102.421 131.209 79.3371C135.751 67.0031 144.472 61.0207 156.058 56.6904C163.851 53.7785 185.334 49.3172 194.504 51.3909C233.016 60.0976 278.029 102.425 292.962 140.048C321.911 212.986 180.247 267.472 144.807 208.469C136.431 194.525 136.786 171.518 136.367 156.43C136.182 149.784 134.314 129.209 140.118 121.256C151.749 105.319 190.212 141.009 198.255 145.83C204.837 149.775 211.647 153.498 218.884 155.948C254.106 167.872 257.479 150.2 284.523 143.421C289.07 142.281 300.474 141.36 305.152 141.493C307.92 141.572 315.749 143.003 313.122 143.902C286.367 153.068 243.793 109.979 220.29 102.465C213.2 100.198 205.677 99.3493 198.255 99.092C184.171 98.6042 172.93 101.722 160.278 107.765C138.552 118.143 132.925 137.196 108.705 128.484"
+          stroke="#ffffff"
+          strokeOpacity="0.9"
+          strokeWidth="6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+};
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState<boolean>(false);
@@ -69,29 +89,9 @@ export default function Home() {
   const [expandedTopics, setExpandedTopics] = useState<Set<string | undefined>>(
     new Set(),
   );
-  const [companies, setCompanies] = useState<string[]>([
-    "Google",
-    "Microsoft",
-    "Amazon",
-    "Apple",
-    "Adobe",
-    "Atlassian",
-    "Accenture",
-    "LinkedIn",
-    "Media.net",
-    "Citadel",
-    "Oracle",
-    "Cisco",
-    "Uber",
-    "Zomato",
-    "Flipkart",
-    "Visa",
-    "Netflix",
-    "Meta",
-  ]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [problems, setProblems] = useState<LeetCodeProblem[]>(mockData);
+  const [problems, setProblems] = useState<LeetCodeProblem[]>([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 25;
@@ -115,14 +115,14 @@ export default function Home() {
       // console.log(csvText); OK
 
       return new Promise((resolve, reject) => {
-        Papa.parse(csvText, {
+        Papa.parse<ResponseData>(csvText, {
           header: true,
           dynamicTyping: true,
           skipEmptyLines: true,
-          transformHeader: (header: string) => header.trim(), // Remove whitespace from headers
+          transformHeader: (header: string) => header.trim(),
           complete: (results) => {
             const data: LeetCodeProblem[] = results.data
-              .map((row: any) => {
+              .map((row) => {
                 // Capitalize difficulty: "EASY" -> "Easy", "MEDIUM" -> "Medium", "HARD" -> "Hard"
                 const difficultyRaw = row["Difficulty"]?.trim().toUpperCase();
                 let difficulty: "Easy" | "Medium" | "Hard" | undefined;
@@ -132,7 +132,11 @@ export default function Home() {
                 else if (difficultyRaw === "HARD") difficulty = "Hard";
 
                 const title = row["Title"]?.trim();
-                const frequency = parseFloat(row["Frequency"]);
+
+                const f = row["Frequency"] || "0";
+                const frequency = parseFloat(
+                  typeof f === "string" ? f : f?.toString(),
+                );
                 const link = row["Link"]?.trim();
                 const topicsStr = row["Topics"]?.trim();
 
@@ -158,7 +162,7 @@ export default function Home() {
 
             resolve(data);
           },
-          error: (error: any) => {
+          error: (error: Error) => {
             reject(error);
           },
         });
@@ -179,7 +183,7 @@ export default function Home() {
 
     // capitalize
     const formattedQuery =
-      searchQuery.charAt(0).toUpperCase() + searchQuery.slice(1).toLowerCase();
+      searchQuery.charAt(0).toUpperCase() + searchQuery.slice(1); //.toLowerCase();
 
     const data = await fetchCompanyData(formattedQuery);
     // console.log(data); OK
@@ -285,17 +289,17 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Main Content */}
         <main className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Filters */}
+          {/* Search & filters */}
           <div className="flex flex-col md:flex-row gap-8 mb-6 justify-between">
-            <div className="flex-1 w-full max-w-md flex justify-center items-center gap-2 relative">
+            <div className="flex-1 w-full max-w-[500px] flex justify-center items-center gap-2 relative">
               <input
                 type="text"
-                placeholder="Search any company..."
+                placeholder="Search companies, check the spelling and case sensitivity."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-800 rounded-full bg-white dark:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-800 rounded-full bg-white dark:bg-neutral-950
+                focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleSearch();
@@ -335,172 +339,182 @@ export default function Home() {
           </div>
 
           {/* Table */}
-          <div className="border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden">
-            <div className="overflow-x-auto">
-              {!isLoading && !error && (
-                <table className="w-full">
-                  <thead className="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
-                    <tr>
-                      <th className="w-0"></th>
-                      <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
-                        Difficulty
-                      </th>
-                      <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
-                        Title
-                      </th>
-                      <th className="px-0 sm:px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
-                        Frequency
-                      </th>
-                      <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
-                        Link
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider hidden sm:table-cell">
-                        Topics
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                    {paginatedData.map((item) => (
-                      <tr
-                        key={item.link}
-                        className="group hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors"
-                      >
-                        <td className="w-12 px-4 py-4 absolute translate-x-[-45px]">
-                          <input
-                            type="checkbox"
-                            checked={completedTasks.has(item.link)}
-                            onChange={() => toggleComplete(item.link)}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity w-4 h-4 rounded border-neutral-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                          />
-                        </td>
-                        <td className="px-1 sm:px-4 py-4">
-                          <span
-                            className={`inline-flex px-2.5 py-0.5 rounded-md text-xs font-medium border ${getDifficultyStyles(item.difficulty)}`}
-                          >
-                            {item.difficulty}
-                          </span>
-                        </td>
-                        <td className="px-2 sm:px-4 py-4 max-w-[336px]">
-                          <span
-                            className={
-                              completedTasks.has(item.link)
-                                ? "line-through text-neutral-500"
-                                : ""
-                            }
-                          >
-                            {item.title}
-                          </span>
-                        </td>
-                        <td className="px-0 sm:px-4 py-4">
-                          <div className="flex items-center gap-2">
-                            <div className="w-16 bg-neutral-200 dark:bg-neutral-800 rounded-full h-2 hidden sm:block">
-                              <div
-                                className="bg-blue-600 h-2 rounded-full"
-                                style={{ width: `${item.frequency}%` }}
-                              ></div>
-                            </div>
-                            <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                              {item.frequency}%
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-1 sm:px-4 py-4">
-                          <a
-                            href={item.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline"
-                          >
-                            Visit <ExternalLink className="size-4" />
-                          </a>
-                        </td>
-                        <td className="px-4 py-4 hidden sm:table-cell max-w-[216px]">
-                          <div className="relative">
-                            <div className="flex flex-wrap gap-1">
-                              {item.topics
-                                .slice(
-                                  0,
-                                  expandedTopics.has(item.id)
-                                    ? item.topics.length
-                                    : 3,
-                                )
-                                .map((topic, idx) => (
-                                  <span
-                                    key={idx}
-                                    className="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
-                                  >
-                                    {topic}
-                                  </span>
-                                ))}
-                              {item.topics.length > 3 && (
-                                <button
-                                  onClick={() => toggleTopics(item.id)}
-                                  className="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
-                                >
-                                  {expandedTopics.has(item.id) ? (
-                                    <>
-                                      Less{" "}
-                                      <ChevronUp className="w-3 h-3 ml-1" />
-                                    </>
-                                  ) : (
-                                    <>
-                                      +{item.topics.length - 3}{" "}
-                                      <ChevronDown className="w-3 h-3 ml-1" />
-                                    </>
-                                  )}
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </td>
+          <div
+            className={`${problems.length > 0 && "border"} border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden`}
+          >
+            {!isLoading && !error && problems.length > 0 && (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
+                      <tr>
+                        <th className="w-0"></th>
+                        <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
+                          Difficulty
+                        </th>
+                        <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
+                          Title
+                        </th>
+                        <th className="px-0 sm:px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
+                          Frequency
+                        </th>
+                        <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
+                          Link
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider hidden sm:table-cell">
+                          Topics
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-
-              {isLoading && <div className="text-center py-8">Loading...</div>}
-
-              {error && (
-                <div className="text-red-600 dark:text-red-400 text-center py-4">
-                  {error}
+                    </thead>
+                    <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                      {paginatedData.map((item) => (
+                        <tr
+                          key={item.link}
+                          className="group hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors"
+                        >
+                          <td className="w-12 px-4 py-4 absolute translate-x-[-45px]">
+                            <input
+                              type="checkbox"
+                              checked={completedTasks.has(item.link)}
+                              onChange={() => toggleComplete(item.link)}
+                              className="opacity-0 group-hover:opacity-100 transition-opacity w-4 h-4 rounded border-neutral-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                            />
+                          </td>
+                          <td className="px-1 sm:px-4 py-4">
+                            <span
+                              className={`inline-flex px-2.5 py-0.5 rounded-md text-xs font-medium border ${getDifficultyStyles(item.difficulty)}`}
+                            >
+                              {item.difficulty}
+                            </span>
+                          </td>
+                          <td className="px-2 sm:px-4 py-4 max-w-[336px]">
+                            <span
+                              className={
+                                completedTasks.has(item.link)
+                                  ? "line-through text-neutral-500"
+                                  : ""
+                              }
+                            >
+                              {item.title}
+                            </span>
+                          </td>
+                          <td className="px-0 sm:px-4 py-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-16 bg-neutral-200 dark:bg-neutral-800 rounded-full h-2 hidden sm:block">
+                                <div
+                                  className="bg-blue-600 h-2 rounded-full"
+                                  style={{ width: `${item.frequency}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                                {item.frequency}%
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-1 sm:px-4 py-4">
+                            <a
+                              href={item.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline"
+                            >
+                              Solve <ExternalLink className="size-4" />
+                            </a>
+                          </td>
+                          <td className="px-4 py-4 hidden sm:table-cell max-w-[216px]">
+                            <div className="relative">
+                              <div className="flex flex-wrap gap-1">
+                                {item.topics
+                                  .slice(
+                                    0,
+                                    expandedTopics.has(item.id)
+                                      ? item.topics.length
+                                      : 3,
+                                  )
+                                  .map((topic, idx) => (
+                                    <span
+                                      key={idx}
+                                      className="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
+                                    >
+                                      {topic}
+                                    </span>
+                                  ))}
+                                {item.topics.length > 3 && (
+                                  <button
+                                    onClick={() => toggleTopics(item.id)}
+                                    className="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                                  >
+                                    {expandedTopics.has(item.id) ? (
+                                      <>
+                                        Less{" "}
+                                        <ChevronUp className="w-3 h-3 ml-1" />
+                                      </>
+                                    ) : (
+                                      <>
+                                        +{item.topics.length - 3}{" "}
+                                        <ChevronDown className="w-3 h-3 ml-1" />
+                                      </>
+                                    )}
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              )}
-            </div>
 
-            {/* Pagination */}
-            <div className="flex items-center justify-between px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800">
-              <div className="text-sm text-neutral-600 dark:text-neutral-400">
-                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-                {Math.min(currentPage * itemsPerPage, filteredData.length)} of{" "}
-                {filteredData.length} results
+                {/* Pagination */}
+                <div className="flex items-center justify-between px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800">
+                  <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                    Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                    {Math.min(currentPage * itemsPerPage, filteredData.length)}{" "}
+                    of {filteredData.length} results
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() =>
+                        setCurrentPage(Math.max(1, currentPage - 1))
+                      }
+                      disabled={currentPage === 1}
+                      className="px-3 py-1 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Previous
+                    </button>
+                    <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      onClick={() =>
+                        setCurrentPage(Math.min(totalPages, currentPage + 1))
+                      }
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {!isLoading && !error && problems.length === 0 && (
+              <div className="grid place-items-center py-16">
+                <CustomSVG />
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                  disabled={currentPage === 1}
-                  className="px-3 py-1 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  Previous
-                </button>
-                <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  onClick={() =>
-                    setCurrentPage(Math.min(totalPages, currentPage + 1))
-                  }
-                  disabled={currentPage === totalPages}
-                  className="px-3 py-1 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  Next
-                </button>
+            )}
+            {isLoading && <div className="text-center py-8">Loading...</div>}
+
+            {error && (
+              <div className="text-red-600 dark:text-red-400 text-center py-4">
+                {error}
               </div>
-            </div>
+            )}
           </div>
         </main>
 
-        {/* Footer */}
         <footer
           className="w-full mt-24 px-4 sm:px-6 lg:px-8 py-3 text-center text-sm space-y-1
           border-t border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400"
