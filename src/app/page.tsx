@@ -9,7 +9,6 @@ import {
   ChevronUp,
   X,
   Search,
-  Regex,
 } from "lucide-react";
 import Papa from "papaparse";
 
@@ -259,15 +258,7 @@ export default function Home() {
               </h1>
               <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
                 List of questions previously asked in different company OA and
-                interviews, credit:{" "}
-                <a
-                  href="https://github.com/liquidslr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:underline"
-                >
-                  liquidslr
-                </a>
+                interviews.
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -282,9 +273,6 @@ export default function Home() {
                   <Moon className="w-5 h-5" />
                 )}
               </button>
-              {/*<button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-              Log in
-            </button>*/}
             </div>
           </div>
         </header>
@@ -520,7 +508,7 @@ export default function Home() {
           border-t border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400"
         >
           <p>
-            Full data storing credit to{" "}
+            Data storing credit to:{" "}
             <a
               href="https://github.com/liquidslr/leetcode-company-wise-problems"
               target="_blank"
@@ -531,12 +519,12 @@ export default function Home() {
             </a>
           </p>
           <p>
-            Contact:{" "}
+            Github:{" "}
             <a
-              href="https://www.myopencanvas.in"
+              href="https://github.com/Dream-World-Coder/leetcode-qns-company-wise"
               className="text-blue-600 dark:text-blue-400 hover:underline"
             >
-              My Personal Site
+              github.com/Dream-World-Coder/leetcode-qns-company-wise
             </a>
           </p>
         </footer>
